@@ -41,6 +41,7 @@ def top_k_edges(z, edge_idx, n_edge_add, degree, n_top_node):
 
     prob_adj = matmul_divide(z)
     prob_adj[edge_idx[0, :], edge_idx[1, :]] = -1
+    prob_adj = prob_adj - torch.diag(prob_adj.diag())
     prob_adj[top_degree_node_index, :] += 1
 
     edge_index = torch.tensor((prob_adj.detach().cpu() > 1).nonzero(as_tuple=False).t(), device=z.device)
